@@ -1,0 +1,768 @@
+[
+    {
+        "id": "8371de8d94ec08c1",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "84f6dd95ad2ecde2",
+        "type": "http in",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "url": "/report",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 570,
+        "y": 760,
+        "wires": [
+            [
+                "469b3b79755a924d"
+            ]
+        ]
+    },
+    {
+        "id": "d0e36e1cf621b0b7",
+        "type": "comment",
+        "z": "8371de8d94ec08c1",
+        "name": "Monitor device door event over HTTP",
+        "info": "",
+        "x": 650,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "56a6b203b83d5962",
+        "type": "debug",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "req.body.notify",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "469b3b79755a924d",
+        "type": "template",
+        "z": "8371de8d94ec08c1",
+        "name": "page",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "plain",
+        "template": "<html>\n    <head></head>\n    <body>\n        <h1>Hello {{payload}}</h1>\n    </body>\n</html>",
+        "output": "str",
+        "x": 770,
+        "y": 760,
+        "wires": [
+            [
+                "56a6b203b83d5962"
+            ]
+        ]
+    },
+    {
+        "id": "be85c64ace9c06f5",
+        "type": "udp in",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "iface": "",
+        "port": "6888",
+        "ipv": "udp4",
+        "multicast": "false",
+        "group": "",
+        "datatype": "utf8",
+        "x": 560,
+        "y": 920,
+        "wires": [
+            [
+                "3769f0c2bbde54cd"
+            ]
+        ]
+    },
+    {
+        "id": "164a852ca09d0cd4",
+        "type": "debug",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.notify",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "7164c9f8719aad5a",
+        "type": "switch",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "property": "payload.door_num",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 830,
+        "y": 920,
+        "wires": [
+            [
+                "164a852ca09d0cd4"
+            ],
+            [
+                "d35a97fcea8b567e"
+            ]
+        ]
+    },
+    {
+        "id": "3769f0c2bbde54cd",
+        "type": "json",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 710,
+        "y": 920,
+        "wires": [
+            [
+                "7164c9f8719aad5a"
+            ]
+        ]
+    },
+    {
+        "id": "d35a97fcea8b567e",
+        "type": "debug",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.notify",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "80d35eebd2174d9f",
+        "type": "inject",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"product\":\"iQ3\",\"version\":\"0.1\",\"data\":{\"type\":\"get\",\"name\":\"dev_st\"}}",
+        "payloadType": "json",
+        "x": 570,
+        "y": 1060,
+        "wires": [
+            [
+                "bd18220f76a53c5a"
+            ]
+        ]
+    },
+    {
+        "id": "bd18220f76a53c5a",
+        "type": "http request",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "http://tailwind-30aea4801880.local/json",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "TOKEN",
+                "valueType": "other",
+                "valueValue": "869769"
+            }
+        ],
+        "x": 730,
+        "y": 1060,
+        "wires": [
+            [
+                "169addb063ba1523",
+                "664f56c6ec62d785"
+            ]
+        ]
+    },
+    {
+        "id": "664f56c6ec62d785",
+        "type": "debug",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1070,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "169addb063ba1523",
+        "type": "json",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 870,
+        "y": 1060,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "089285cda993ad2f",
+        "type": "comment",
+        "z": "8371de8d94ec08c1",
+        "name": "Get device status via HTTP request",
+        "info": "",
+        "x": 640,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "8d323c8abd771f66",
+        "type": "comment",
+        "z": "8371de8d94ec08c1",
+        "name": "Monitor device door event over UDP",
+        "info": "",
+        "x": 640,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "4572675a2389f74a",
+        "type": "inject",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"product\":\"iQ3\",\"version\":\"0.1\",\"data\":{\"type\":\"set\",\"name\":\"door_op\",\"value\":{\"door_idx\":0,\"cmd\":\"open\",\"partial_ms\":0}}}",
+        "payloadType": "json",
+        "x": 570,
+        "y": 1180,
+        "wires": [
+            [
+                "d24237724c37d65f"
+            ]
+        ]
+    },
+    {
+        "id": "d24237724c37d65f",
+        "type": "http request",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "http://tailwind-30aea4801880.local/json",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "TOKEN",
+                "valueType": "other",
+                "valueValue": "869769"
+            }
+        ],
+        "x": 730,
+        "y": 1180,
+        "wires": [
+            [
+                "83a99514e98c8273"
+            ]
+        ]
+    },
+    {
+        "id": "b82f01862d8fd08f",
+        "type": "debug",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1070,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "83a99514e98c8273",
+        "type": "json",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 870,
+        "y": 1180,
+        "wires": [
+            [
+                "b82f01862d8fd08f"
+            ]
+        ]
+    },
+    {
+        "id": "c596ab319de273ee",
+        "type": "comment",
+        "z": "8371de8d94ec08c1",
+        "name": "Open door 1",
+        "info": "",
+        "x": 570,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "a6d468f0ed07a4ce",
+        "type": "inject",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"product\":\"iQ3\",\"version\":\"0.1\",\"data\":{\"type\":\"set\",\"name\":\"door_op\",\"value\":{\"door_idx\":0,\"cmd\":\"close\",\"partial_ms\":0}}}",
+        "payloadType": "json",
+        "x": 570,
+        "y": 1300,
+        "wires": [
+            [
+                "8fa0f57a44c17728"
+            ]
+        ]
+    },
+    {
+        "id": "8fa0f57a44c17728",
+        "type": "http request",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "http://tailwind-30aea4801880.local/json",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "TOKEN",
+                "valueType": "other",
+                "valueValue": "869769"
+            }
+        ],
+        "x": 730,
+        "y": 1300,
+        "wires": [
+            [
+                "8c6936d9b4f8c521"
+            ]
+        ]
+    },
+    {
+        "id": "8ce5013c8831ee86",
+        "type": "debug",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1070,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "8c6936d9b4f8c521",
+        "type": "json",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 870,
+        "y": 1300,
+        "wires": [
+            [
+                "8ce5013c8831ee86"
+            ]
+        ]
+    },
+    {
+        "id": "e34a30a7ad8bd04c",
+        "type": "comment",
+        "z": "8371de8d94ec08c1",
+        "name": "Close door 1",
+        "info": "",
+        "x": 570,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "f299d87c80e8707f",
+        "type": "inject",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"product\":\"iQ3\",\"version\":\"0.1\",\"data\":{\"type\":\"set\",\"name\":\"door_op\",\"value\":{\"door_idx\":1,\"cmd\":\"open\",\"partial_ms\":0}}}",
+        "payloadType": "json",
+        "x": 570,
+        "y": 1420,
+        "wires": [
+            [
+                "e8dc4bbdc7d15ccb"
+            ]
+        ]
+    },
+    {
+        "id": "e8dc4bbdc7d15ccb",
+        "type": "http request",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "http://tailwind-30aea4801880.local/json",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "TOKEN",
+                "valueType": "other",
+                "valueValue": "869769"
+            }
+        ],
+        "x": 730,
+        "y": 1420,
+        "wires": [
+            [
+                "138e2ec39b95e6a9"
+            ]
+        ]
+    },
+    {
+        "id": "2e5dcd6035b75167",
+        "type": "debug",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1070,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "138e2ec39b95e6a9",
+        "type": "json",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 870,
+        "y": 1420,
+        "wires": [
+            [
+                "2e5dcd6035b75167"
+            ]
+        ]
+    },
+    {
+        "id": "c031ae7765acc824",
+        "type": "comment",
+        "z": "8371de8d94ec08c1",
+        "name": "Open door 2",
+        "info": "",
+        "x": 570,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "75e114b86fd29aab",
+        "type": "inject",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"product\":\"iQ3\",\"version\":\"0.1\",\"data\":{\"type\":\"set\",\"name\":\"door_op\",\"value\":{\"door_idx\":1,\"cmd\":\"close\",\"partial_ms\":0}}}",
+        "payloadType": "json",
+        "x": 570,
+        "y": 1420,
+        "wires": [
+            [
+                "7e1d3045a06646c1"
+            ]
+        ]
+    },
+    {
+        "id": "7e1d3045a06646c1",
+        "type": "http request",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "http://tailwind-30aea4801880.local/json",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "TOKEN",
+                "valueType": "other",
+                "valueValue": "869769"
+            }
+        ],
+        "x": 730,
+        "y": 1420,
+        "wires": [
+            [
+                "e74da2efbeabdb24"
+            ]
+        ]
+    },
+    {
+        "id": "b41cc2ad3d43a1df",
+        "type": "debug",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1070,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "e74da2efbeabdb24",
+        "type": "json",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 870,
+        "y": 1420,
+        "wires": [
+            [
+                "b41cc2ad3d43a1df"
+            ]
+        ]
+    },
+    {
+        "id": "505bc6ea99d55275",
+        "type": "comment",
+        "z": "8371de8d94ec08c1",
+        "name": "Close door 2",
+        "info": "",
+        "x": 570,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "bcfa5a22273705b8",
+        "type": "inject",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"product\":\"iQ3\",\"version\":\"0.1\",\"data\":{\"type\":\"set\",\"name\":\"door_op\",\"value\":{\"door_idx\":1,\"cmd\":\"close\",\"partial_ms\":0}}}",
+        "payloadType": "json",
+        "x": 570,
+        "y": 1540,
+        "wires": [
+            [
+                "3de2b352b2302bac"
+            ]
+        ]
+    },
+    {
+        "id": "3de2b352b2302bac",
+        "type": "http request",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "http://tailwind-30aea4801880.local/json",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "TOKEN",
+                "valueType": "other",
+                "valueValue": "869769"
+            }
+        ],
+        "x": 730,
+        "y": 1540,
+        "wires": [
+            [
+                "7d15be16cdef9b1b"
+            ]
+        ]
+    },
+    {
+        "id": "3e5416864088afa4",
+        "type": "debug",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1070,
+        "y": 1540,
+        "wires": []
+    },
+    {
+        "id": "7d15be16cdef9b1b",
+        "type": "json",
+        "z": "8371de8d94ec08c1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 870,
+        "y": 1540,
+        "wires": [
+            [
+                "3e5416864088afa4"
+            ]
+        ]
+    }
+]
